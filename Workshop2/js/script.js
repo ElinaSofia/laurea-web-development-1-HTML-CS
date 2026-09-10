@@ -46,3 +46,31 @@ if (visitorfavoriteAnimal == "highland baby cattle")
 else if (visitorfavoriteAnimal !== "highland baby cattle")
 {console.log("Nice! Your favorite animal is " + visitorfavoriteAnimal);}
 // const visitorFavoriteAnimal = prompt("What is your favorite animal?");
+
+// STEP 4: Conditionals
+
+const visitorAge = prompt("What is your age? ");
+
+if (visitorAge >=18) {
+    console.log("You are an adult. ");
+} 
+else {
+    console.log("You are under 18. ");
+}
+
+// STEP 5: Functions
+
+function greetUser(name) {
+    console.log("Hello " + name + "!");
+}
+
+greetUser("John");
+greetUser(visitorName);
+
+// STEP 6: Button click
+
+const myButton = document.getElementById("myButton");
+
+myButton.addEventListener("click", function() {
+    alert("JavaScript works!");
+});
