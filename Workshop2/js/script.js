@@ -72,5 +72,5 @@ greetUser(visitorName);
 const myButton = document.getElementById("myButton");
 
 myButton.addEventListener("click", function() {
-    alert("JavaScript works!");
+    alert("Hurrayyyy it works!");
 });
