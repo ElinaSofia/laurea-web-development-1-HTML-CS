@@ -72,5 +72,27 @@ greetUser(visitorName);
 const myButton = document.getElementById("myButton");
 
 myButton.addEventListener("click", function() {
-    alert("Hurrayyyy it works!");
+    document.getElementById("message") .textContent = "Hurraayyy it works! 🎉";
+    createFireworks();
 });
+
+function createFireworks() {
+    const colors = ["#ff595e", "#ffca3a", "#8ac926", "#1982c4", "#6a4c93"];
+
+    for (let i = 0; i < 30; i++) {
+        const particle = document.createElement("div");
+        particle.classList.add("particle");
+        particle.style.left = myButton.offsetLeft + myButton.offsetWidth / 2 + "px";
+        particle.style.top = myButton.offsetTop + "px";
+        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = 100 + Math.random() * 100;
+        particle.style.setProperty("--x", Math.cos(angle) * distance + "px");
+        particle.style.setProperty("--y", Math.sin(angle) * distance + "px");
+
+        document.body.appendChild(particle);
+
+        setTimeout(() => particle.remove(), 1000);
+    }
+}
