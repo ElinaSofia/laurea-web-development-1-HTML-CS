@@ -156,6 +156,8 @@ tbody tr:nth-child(even) {
         padding: 1rem;
     }
 
+/* omia lisäyksiä */
+
     header,
     section {
         padding: 1rem;
@@ -168,6 +170,13 @@ tbody tr:nth-child(even) {
     button {
         width: 100%;
     }
+}
+
+#animalTable img {
+    width: 400px;
+    max-width: 100%;
+    height: auto;
+    display: block;
 }
 
 /* Bonus tehtävä: */

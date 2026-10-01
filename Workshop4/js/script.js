@@ -1,5 +1,4 @@
 // MUOKATAAN OTSIKKOA KUN NAPPIA PAINETAAN
-// MUOKATAAN OTSIKKOA KUN NAPPIA PAINETAAN
 
 const changeHeadingButton = document.querySelector("#changeHeadingButton");
 const taskOneHeading = document.querySelector("#taskOneHeading");
@@ -148,7 +147,9 @@ animalForm.addEventListener("submit", function (event) {
     tdLocation.textContent = location;
 
     const tdDate = document.createElement("td");
-    tdDate.textContent = date;
+
+    const [year, month, day] = date.split("-");
+    tdDate.textContent = `${Number(day)}.${Number(month)}.${year}`;
 
     tr.append(tdAnimal, tdLocation, tdDate);
     addDeleteButton(tr);
