@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<HTML lang="fi">
+
+<head>
+	<meta charset="utf-8">
+	<title>Työpaja 7</title>
+	<link rel="stylesheet" href="css/styles.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body class="ws8">
+	<h1>Työpaja 7: JSON/XML:n parsiminen AJAXilla</h1>
+	<hr />
+	<p>Tässä harjoituksessa harjoittelemme JSONin käyttöä JavaScript-sovelluksissa. Käytä luentomateriaalia rinnalla
+		viitteenä näiden tehtävien aikana.</p>
+
+	<hr />
+	<h2>Harjoitus 1: JSONin perusteet</h2>
+	<p>JSON tarkoittaa JavaScript Object Notationia, ja se tarkoittaa, että esittelemme datan muodossa, jonka JavaScript
+		ymmärtää sellaisenaan. Muunnoksia ei tarvita sen käyttämiseen.</p>
+	<p>
+		<button onclick="naytaNimet()">Näytä vain etu- ja sukunimi</button>
+		<button onclick="naytaKaikki()">Näytä kaikki tiedot</button>
+	</p>
+	<p>Kokeillaan seuraavaa. Voit luoda uuden JSON-datasetin JavaScript-koodissasi alla olevan mallin mukaisesti. Luo
+		sitten funktiot, jotka suoritetaan, kun painikkeita klikataan.</p>
+
+	<pre>
+			var text = '{ "employees" : [' +
+			'{ "firstName":"John" , "lastName":"Doe" },' +
+			'{ "firstName":"Anna" , "lastName":"Smith" },' +
+			'{ "firstName":"Peter" , "lastName":"Jones" } ]}';
+		</pre>
+	<ul>
+		<li>Ensimmäinen painike näyttää etu- ja sukunimen jokaisesta kohteesta alla olevassa divissä.</li>
+		<li>Toinen painike näyttää kaikki tiedot kaikista kohteista alla olevassa divissä. Halutessasi voit käyttää
+			for-silmukoita tässä.</li>
+	</ul>
+	<div id="jsondata">JSON-data näkyy täällä.</div>
+	<hr />
+	<h2>Harjoitus 2: JSONin parsiminen verkosta</h2>
+	<p>Alla näet kaksi painiketta. Muokkaa lähdekoodia ja lisää näihin painikkeisiin onClick-tapahtumat. Lisää
+		toiminnallisuudet alla kuvatulla tavalla.</p>
+	<p>
+		<button onclick="lataaRaakaData()">Lataa raaka data</button>
+		<button onclick="lataaJaParsi()">Lataa ja parsi data</button>
+	</p>
+
+	<ul>
+		<li>Ensimmäisen painikkeen tulee suorittaa JavaScript-funktio, joka lataa annetun <a
+				href="http://www.omdbapi.com/?s=star+wars&apikey=cbbc6750">JSON-tiedoston verkosta</a> ja näyttää sen
+			raakatiedot alla olevassa divissä (id=rawdata). Käytä kehittäjätyökaluja (F12) seurataksesi AJAX-kutsua ja
+			tutki otsikoita, suoritus­aikoja jne.</li>
+		<li>Toisen painikkeen tulee suorittaa funktio, joka lataa saman datan, mutta parsii sen ja näyttää tiedot
+			taulukossa.</li>
+		<li>Kun olet saanut datan näkyviin, kokeile ladata myös kuvat sivulle.</li>
+	</ul>
+	<div id="rawdata">Raaka data näkyy täällä.</div>
+
+	<hr />
+	<h2>Harjoitus 3: Käytännön haaste: OpenWeatherMap API</h2>
+
+	<p>OpenWeatherMap on tunnettu säädatan tarjoaja verkossa. Se tarjoaa API:n, jonka avulla kehittäjät voivat hakea
+		säätietoja. <a href="https://openweathermap.org/api">Dokumentaatio löytyy täältä</a>.</p>
+	<p>Tehtäväsi on kirjoittaa Sää-sovellus, joka näyttää säätiedot käyttäjän toiveiden mukaan. <b>Huomaa, että sinun
+			täytyy rekisteröityä (ilmaista) saadaksesi API-avaimen, joka mahdollistaa palvelun käytön.</b></p>
+
+	<p>Esimerkkikutsu REST API:iin voisi näyttää tältä: <a
+			href="http://api.openweathermap.org/data/2.5/weather?q=Helsinki&units=metric&mode=JSON&APPID=ff64c247a136f706923d1ee0d55d71e2">http://api.openweathermap.org/data/2.5/weather?q=Helsinki&units=metric&mode=JSON&APPID=ff64c247a136f706923d1ee0d55d71e2</a>.
+		Klikkaa nähdäksesi vastauksen.</p>
+	<ul>
+		<li>Kehitä ensin sovellus, joka näyttää raakatiedot säästä (lämpötila, pilvisyys, ilmankosteus) tietyssä
+			kaupungissa, kun painiketta klikataan. <button onclick="haeRaakaSaa()">Hae data</button></li>
+		<li>Kun tämä toimii, parsi data ja tulosta se diviin.</li>
+		<li>Tämän jälkeen lisää onchange-tapahtuma pudotusvalikkoon, jotta käyttäjä voi valita, minkä kaupungin tiedot
+			näytetään listalta.</li>
+		<li>Lopuksi lisää toiminnallisuus syötekenttään, johon käyttäjä voi kirjoittaa hakukyselyn, joka lähetetään
+			OpenWeatherMap API:lle ja jonka tulokset näytetään sovelluksessa.</li>
+	</ul>
+	<p>Valitse kaupunki listalta:</p>
+	<select name="mySelect" id="city" onchange="haeSaa(this.value)">
+		<option value="Helsinki">Helsinki</option>
+		<option value="Stockholm">Tukholma</option>
+		<option value="Rome">Rooma</option>
+		<option value="New York">New York</option>
+	</select>
+	<p>Tai kirjoita hakusana: <input id="citysearch" /><button id="search" onclick="haeKirjoitettu()">Hae</button></p>
+	<div id="weatherdata">Säätiedot näkyvät täällä.</div>
+
+    <script>
+        /* ---------------------------------------------------------
+		   Harjoitus 1: JSONin perusteet
+		   --------------------------------------------------------- */
+		var text = '{ "employees" : [' +
+			'{ "firstName":"John" , "lastName":"Doe" },' +
+			'{ "firstName":"Anna" , "lastName":"Smith" },' +
+			'{ "firstName":"Peter" , "lastName":"Jones" } ]}';
+ 
+		// Muutetaan JSON-teksti JavaScript-olioksi
+		var data = JSON.parse(text);
+ 
+		// Painike 1: näytetään vain etu- ja sukunimet
+		function naytaNimet() {
+			var html = "";
+			for (var i = 0; i < data.employees.length; i++) {
+				html += data.employees[i].firstName + " " + data.employees[i].lastName + "<br>";
+			}
+			document.getElementById("jsondata").innerHTML = html;
+		}
+ 
+		// Painike 2: näytetään kaikki tiedot jokaisesta työntekijästä
+		function naytaKaikki() {
+			var html = "";
+			for (var i = 0; i < data.employees.length; i++) {
+				html += "<b>Työntekijä " + (i + 1) + "</b><br>";
+				// for...in käy läpi kaikki olion kentät
+				for (var avain in data.employees[i]) {
+					html += avain + ": " + data.employees[i][avain] + "<br>";
+				}
+				html += "<br>";
+			}
+			document.getElementById("jsondata").innerHTML = html;
+		}
+ 
+		/* -----------------------------------------------------------------------------------
+		   Harjoitus 2: JSONin parsiminen verkosta (OMDb API)
+		   http-osoitteen muutos –> https-osoite muotoon, jotta toimii myös GitHub Pagesissa
+		   ----------------------------------------------------------------------------------- */
+		var OMDB_URL = "https://www.omdbapi.com/?s=star+wars&apikey=cbbc6750";
+ 
+		// Painike 1: ladataan data ja näytetään se raakana tekstinä
+		function lataaRaakaData() {
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", OMDB_URL, true);
+			xhr.onload = function () {
+				if (xhr.status === 200) {
+					var pre = document.createElement("pre");
+					pre.className = "raw";
+					pre.textContent = xhr.responseText;
+					var div = document.getElementById("rawdata");
+					div.innerHTML = "";
+					div.appendChild(pre);
+				} else {
+					naytaVirhe("rawdata", "Lataus epäonnistui (status " + xhr.status + ")");
+				}
+			};
+			xhr.onerror = function () {
+				naytaVirhe("rawdata", "Verkkovirhe – dataa ei saatu ladattua.");
+			};
+			xhr.send();
+		}
+ 
+		// Painike 2: ladataan sama data, parsitaan ja näytetään taulukossa kuvineen
+		function lataaJaParsi() {
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", OMDB_URL, true);
+			xhr.onload = function () {
+				if (xhr.status !== 200) {
+					naytaVirhe("rawdata", "Lataus epäonnistui (status " + xhr.status + ")");
+					return;
+				}
+				var vastaus = JSON.parse(xhr.responseText);
+				if (vastaus.Response === "False") {
+					naytaVirhe("rawdata", vastaus.Error);
+					return;
+				}
+				var leffat = vastaus.Search;
+				var html = "<table><tr><th>Kuva</th><th>Nimi</th><th>Vuosi</th><th>Tyyppi</th><th>IMDb ID</th></tr>";
+				for (var i = 0; i < leffat.length; i++) {
+					var kuva;
+                    var kuva;
+                    var kuva;
+                    if (leffat[i].Poster !== "N/A") {
+                        kuva = '<img src="' + leffat[i].Poster + '" alt="' + leffat[i].Title + '">';
+                    } else {
+                         kuva = "Ei kuvaa";
+                    }
+					html += "<tr>" +
+						"<td>" + kuva + "</td>" +
+						"<td>" + leffat[i].Title + "</td>" +
+						"<td>" + leffat[i].Year + "</td>" +
+						"<td>" + leffat[i].Type + "</td>" +
+						"<td>" + leffat[i].imdbID + "</td>" +
+						"</tr>";
+				}
+				html += "</table>";
+				document.getElementById("rawdata").innerHTML = html;
+			};
+			xhr.onerror = function () {
+				naytaVirhe("rawdata", "Verkkovirhe – dataa ei saatu ladattua.");
+			};
+			xhr.send();
+		}
+ 
+		/* ---------------------------------------------------------
+		   Harjoitus 3: OpenWeatherMap API
+		   ---------------------------------------------------------*/
+
+		var API_KEY = "acc4705cb6429840793d307d34250eda";
+ 
+		function saaUrl(kaupunki) {
+			return "https://api.openweathermap.org/data/2.5/weather?q=" +
+				encodeURIComponent(kaupunki) + "&units=metric&lang=fi&appid=" + API_KEY;
+		}
+ 
+		// Vaihe 1: "Hae data" -painike näyttää valitun kaupungin raakatiedot
+		function haeRaakaSaa() {
+			var kaupunki = document.getElementById("city").value;
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", saaUrl(kaupunki), true);
+			xhr.onload = function () {
+				var pre = document.createElement("pre");
+				pre.className = "raw";
+				pre.textContent = xhr.responseText;
+				var div = document.getElementById("weatherdata");
+				div.innerHTML = "";
+				div.appendChild(pre);
+			};
+			xhr.onerror = function () {
+				naytaVirhe("weatherdata", "Verkkovirhe – säätietoja ei saatu.");
+			};
+			xhr.send();
+		}
+ 
+		// Vaiheet 2–4: haetaan säätiedot, parsitaan ja näytetään siististi
+		function haeSaa(kaupunki) {
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", saaUrl(kaupunki), true);
+			xhr.onload = function () {
+				var saa = JSON.parse(xhr.responseText);
+				if (xhr.status !== 200) {
+					// esim. 404 = kaupunkia ei löytynyt, 401 = väärä API-avain
+					naytaVirhe("weatherdata", "Virhe: " + saa.message);
+					return;
+				}
+                    var html =
+                    "<h3>" + saa.name + "</h3>" +
+					"<table>" +
+					"<tr><th>Sää</th><td>" + saa.weather[0].description + "</td></tr>" +
+					"<tr><th>Lämpötila</th><td>" + saa.main.temp.toFixed(1) + " °C</td></tr>" +
+					"<tr><th>Pilvisyys</th><td>" + saa.clouds.all + " %</td></tr>" +
+					"<tr><th>Ilmankosteus</th><td>" + saa.main.humidity + " %</td></tr>" +
+                    "</table>";
+
+        document.getElementById("weatherdata").innerHTML = html;
+                    };
+			xhr.onerror = function () {
+				naytaVirhe("weatherdata", "Verkkovirhe – säätietoja ei saatu.");
+			};
+			xhr.send();
+		}
+ 
+		// Vaihe 4: hakukenttä
+		function haeKirjoitettu() {
+			var haku = document.getElementById("citysearch").value.trim();
+			haeSaa(haku);
+		}
+ 
+		// Apufunktio virheilmoituksille
+		function naytaVirhe(divId, viesti) {
+			var div = document.getElementById(divId);
+			div.innerHTML = "";
+			var p = document.createElement("p");
+			p.className = "virhe";
+			p.textContent = viesti;
+			div.appendChild(p);
+		}
+	</script>
+</body>
+
+</html>
