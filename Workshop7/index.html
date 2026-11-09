@@ -86,6 +86,7 @@
 	</select>
 	<p>Tai kirjoita hakusana: <input id="citysearch" /><button id="search" onclick="haeKirjoitettu()">Hae</button></p>
 	<div id="weatherdata">Säätiedot näkyvät täällä.</div>
+	<script src="config.js"></script>
 
     <script>
         /* ---------------------------------------------------------
@@ -195,8 +196,6 @@
 		/* ---------------------------------------------------------
 		   Harjoitus 3: OpenWeatherMap API
 		   ---------------------------------------------------------*/
-
-		var API_KEY = "OMA_API_AVAIN";
  
 		function saaUrl(kaupunki) {
 			return "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -265,6 +264,7 @@
 			p.textContent = viesti;
 			div.appendChild(p);
 		}
+
 	</script>
 </body>
 
